@@ -9,6 +9,7 @@ class GildedRose
     @items.each do |item|
       if (item.name != 'Aged Brie') && (item.name != 'Backstage passes to a TAFKAL80ETC concert')
         item.quality = item.quality - 1 if item.quality.positive? && (item.name != 'Sulfuras, Hand of Ragnaros')
+        item.quality = item.quality - 1 if item.quality.positive? && (item.name == 'Conjured')
       elsif item.quality < 50
         item.quality = item.quality + 1
         if item.name == 'Backstage passes to a TAFKAL80ETC concert'
@@ -20,15 +21,21 @@ class GildedRose
       if item.sell_in.negative?
         if item.name != 'Aged Brie'
           if item.name == 'Backstage passes to a TAFKAL80ETC concert'
-            item.quality = item.quality - item.quality
+            item.quality = 0
+          elsif item.quality.positive? && (item.name != 'Sulfuras, Hand of Ragnaros') && item.name == 'Conjured'
+            item.quality -= 2
           elsif item.quality.positive? && (item.name != 'Sulfuras, Hand of Ragnaros')
-            item.quality = item.quality - 1
+            item.quality -= 1
           end
         elsif item.quality < 50
           item.quality = item.quality + 1
         end
       end
     end
+  end
+
+  def print_item_details
+    @items.each(&:to_s)
   end
 end
 
