@@ -1,41 +1,31 @@
 # frozen_string_literal: true
 
+
 class GildedRose
-  def initialize(items)
-    @items = items
+  def initialize(item)
+    @item = item
   end
 
   def update_quality
-    @items.each do |item|
-      if (item.name != 'Aged Brie') && (item.name != 'Backstage passes to a TAFKAL80ETC concert')
-        item.quality = item.quality - 1 if item.quality.positive? && (item.name != 'Sulfuras, Hand of Ragnaros')
-        item.quality = item.quality - 1 if item.quality.positive? && (item.name == 'Conjured')
-      elsif item.quality < 50
-        item.quality = item.quality + 1
-        if item.name == 'Backstage passes to a TAFKAL80ETC concert'
-          item.quality = item.quality + 1 if item.sell_in < 11 && (item.quality < 50)
-          item.quality = item.quality + 1 if item.sell_in < 6 && (item.quality < 50)
-        end
-      end
-      item.sell_in = item.sell_in - 1 if item.name != 'Sulfuras, Hand of Ragnaros'
-      if item.sell_in.negative?
-        if item.name != 'Aged Brie'
-          if item.name == 'Backstage passes to a TAFKAL80ETC concert'
-            item.quality = 0
-          elsif item.quality.positive? && (item.name != 'Sulfuras, Hand of Ragnaros') && item.name == 'Conjured'
-            item.quality -= 2
-          elsif item.quality.positive? && (item.name != 'Sulfuras, Hand of Ragnaros')
-            item.quality -= 1
-          end
-        elsif item.quality < 50
-          item.quality = item.quality + 1
-        end
-      end
-    end
+    @item.quality = if @item.sell_in.negative?
+                      decrease_quality(@item.quality, 2)
+                    else
+                      decrease_quality(@item.quality, 1)
+                    end
   end
 
-  def print_item_details
-    @items.each(&:to_s)
+  def increase_quality(quality, increment_by)
+    quality += increment_by
+    [quality, 50].min
+  end
+
+  def decrease_quality(quality, decrement_by)
+    quality -= decrement_by
+    if quality.positive?
+      quality
+    else
+      0
+    end
   end
 end
 
@@ -52,3 +42,8 @@ class Item
     "#{@name}, #{@sell_in}, #{@quality}"
   end
 end
+item = Item.new('Aged Brie', 0, 0)
+item.sell_in -= 1
+test = GildedRose.new(item)
+test.update_quality
+pp item.to_s
