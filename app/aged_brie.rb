@@ -1,25 +1,17 @@
 # frozen_string_literal: true
 
-require 'gilded_rose'
+$LOAD_PATH << './app'
+require 'item'
+require 'adjustment'
 
-class AgedBrie < GildedRose
-  def initialize(item)
-    super
-    @items = item
-  end
+class AgedBrie < Item
+  include Adjustment
 
   def update_quality
-    @items.each do |item|
-      if @item.sell_in.negative?
-        super.increase_quality(@item.quality, 2)
-      else
-        super.increase_quality(@item.quality, 1)
-      end
+    if sell_in.negative?
+      increase_quality(quality, 2)
+    else
+      increase_quality(quality, 1)
     end
   end
 end
-
-item = Item.new('Aged Brie', 6, 34)
-test = AgedBrie.new(item)
-test.update_quality
-pp item.to_s
