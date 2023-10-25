@@ -177,13 +177,6 @@ describe GildedRose do
     end
   end
 
-  describe '#print_item_details' do
-  it 'when sell in date is current date and quality is 0' do
-    items = [Item.new('foo', 0, 0)]
-    expect(described_class.new(items).print_item_details.first.to_s).to eq('foo, 0, 0')
-  end
-  end
-
   it 'when sell in date is current date and quality is 0' do
     items = Item.new('foo', 0, 0)
     expect(items.to_s).to eq('foo, 0, 0')

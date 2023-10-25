@@ -5,13 +5,11 @@ require 'item'
 require 'adjustment'
 
 class AgedBrie < Item
-  include Adjustment
-
   def update_quality
     if sell_in.negative?
-      increase_quality(quality, 2)
+      increase_quality(2)
     else
-      increase_quality(quality, 1)
+      increase_quality(1)
     end
   end
 end
